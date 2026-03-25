@@ -20,6 +20,7 @@
   - Frontend flow: landing, upload, analysis, results.
   - Premium dark style foundation.
   - EN/Hindi toggle and static translations.
+  - Added global footer and dedicated contact page with founder details.
 - Phase 5:
   - Visual evidence generation from uploaded video.
   - Annotated frame with skeleton and knee/ankle angle labels.
@@ -32,21 +33,33 @@
   - Added download buttons for evidence images and full report JSON.
   - Implemented key-frame click-to-focus interaction (key card updates hero evidence).
   - Refined landing hero to balanced split layout with science visualization panel.
+  - Added key-frame event quality scoring and caption metadata.
+  - Surfaced evidence quality and captions in results UI.
+  - Added low-visibility detection with clearer error guidance.
+  - Added retry-help UI on analysis failure with actionable capture tips.
+  - Added quality trend data across frames and rendered chart on results page.
+  - Added backend PDF report endpoint and frontend PDF download action.
+  - Added deployment/environment config files (`render.yaml`, `vercel.json`, `.env.example`).
+  - Added low-visibility detection with actionable retry tips in analysis page.
+  - Added quality trend chart in report UI.
+  - Added downloadable PDF report endpoint and UI integration.
+  - Added `shoe_catalogue.json` category dataset scaffold.
+  - Added `test_gait_analyzer.py` unit test.
+  - Added GitHub workflow scaffold (`.github/workflows/deploy.yml`).
 
 ## Remaining Work
 - Phase 5:
-  - Improve error UX for low-light/occlusion videos.
-  - Add confidence trend chart over frames.
-  - Add richer key-frame captions and event-quality scoring.
+  - Tune quality scoring thresholds using real user videos.
+  - Improve confidence trend interpretation (labels/thresholds).
 - Phase 6:
   - Deploy backend to Render and frontend to Vercel.
-  - Configure production CORS and environment variables.
+  - Validate production PDF and asset downloads.
 - Phase 7:
   - Investor-grade UI polish and motion tuning.
   - Final brand narrative and pitch walkthrough assets.
 
 ## Next Immediate Tasks
 1. Validate landing + results UX on mobile and desktop with 8+ test videos.
-2. Add richer evidence captions and event-quality scoring.
-3. Add downloadable PDF report (evidence + insights + recommendations).
-4. Prepare deployment configs and production environment setup.
+2. Tune event quality scoring on mixed lighting and camera distances.
+3. Final UI polish pass for typography spacing and consistency.
+4. Deploy using `render.yaml` + Vercel and run end-to-end production checks.

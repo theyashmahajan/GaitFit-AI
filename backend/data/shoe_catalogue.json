@@ -1,0 +1,25 @@
+{
+  "categories": [
+    {
+      "id": "stability",
+      "name": "Stability Shoes",
+      "description": "Added structure to reduce inward roll during stance."
+    },
+    {
+      "id": "motion_control",
+      "name": "Motion Control Shoes",
+      "description": "Maximum support for stronger pronation control needs."
+    },
+    {
+      "id": "cushioned",
+      "name": "Cushioned Shoes",
+      "description": "Higher impact absorption for outward loading and comfort."
+    },
+    {
+      "id": "neutral_running",
+      "name": "Neutral Running Shoes",
+      "description": "Balanced support for neutral gait patterns."
+    }
+  ]
+}
+

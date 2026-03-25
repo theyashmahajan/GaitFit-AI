@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LanguageToggle from "../components/LanguageToggle";
+import SiteFooter from "../components/SiteFooter";
 import VideoUploader from "../components/VideoUploader";
 import { uploadVideo } from "../api/gaitfit";
 import { content } from "./content";
@@ -38,9 +39,9 @@ function UploadPage() {
       <button className="cta" onClick={submit} disabled={!file || busy}>
         {busy ? t.working : t.analyze}
       </button>
+      <SiteFooter text={t} />
     </main>
   );
 }
 
 export default UploadPage;
-

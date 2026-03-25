@@ -36,7 +36,9 @@ function VisualEvidence({ evidence, imageSrc, text, apiBase }) {
           <span>{text.sideLabel}: {active.side === "left" ? text.left : text.right}</span>
           <span>{text.kneeAngle}: {Math.round(active.angles?.knee_deg || 0)} deg</span>
           <span>{text.ankleAngle}: {Math.round(active.angles?.ankle_deg || 0)} deg</span>
+          <span>{text.quality}: {Math.round((active.quality_score || 0) * 100)}%</span>
         </div>
+        {active.caption && <p className="muted key-note">{active.caption}</p>}
       </div>
       <div className="evidence-image-wrap" style={ratioStyle}>
         <img src={activeSrc} alt="Annotated gait frame with measured joints and angles" className="evidence-image" />
@@ -65,6 +67,8 @@ function VisualEvidence({ evidence, imageSrc, text, apiBase }) {
                   <div className="key-meta">
                     <strong>{k.label}</strong>
                     <span>{text.frameLabel}: {k.frame_index}</span>
+                    <span>{text.quality}: {Math.round((k.quality_score || 0) * 100)}%</span>
+                    {k.caption && <p className="muted key-caption">{k.caption}</p>}
                     <a href={ksrc} download={`gaitfit_${k.id}_frame_${k.frame_index}.jpg`} className="mini-cta">
                       {text.downloadEvidence}
                     </a>

@@ -8,3 +8,4 @@ mediapipe==0.10.14
 ffmpeg-python==0.2.0
 python-dotenv==1.0.1
 scikit-learn==1.5.2
+reportlab==4.2.2

@@ -19,6 +19,8 @@ AI-powered gait analysis prototype that takes a short side-view walking video, e
   - Top 3 shoe category recommendations
   - Downloadable report JSON
 - Premium dark frontend with English/Hindi toggle
+- Dedicated contact page + global footer with founder contact details
+- PDF + JSON downloadable reports
 
 ## Tech Stack
 
@@ -39,6 +41,7 @@ backend/
   models.py
   utils/
   data/
+    shoe_catalogue.json
 frontend/
   src/
 Implementation/
@@ -74,6 +77,7 @@ App: `http://localhost:5173`
 - `POST /upload-video`
 - `GET /status/{job_id}`
 - `GET /results/{job_id}`
+- `GET /report/{job_id}.pdf`
 - `GET /assets/{file}` (generated evidence images and debug assets)
 
 ## Notes
@@ -81,4 +85,18 @@ App: `http://localhost:5173`
 - `done.md` tracks completed work, current phase, and next tasks.
 - Temporary uploads and generated processed files are git-ignored.
 - Current recommendation scope is shoe categories (not brand catalog matching yet).
+- CI workflow now runs backend tests and frontend build on push to `main`.
 
+## Environment
+
+Copy `.env.example` to `.env` and set values:
+
+- `FRONTEND_ORIGINS` (comma-separated allowed frontend URLs)
+- `ANTHROPIC_API_KEY` (optional for later Claude explanation integration)
+
+## Deployment
+
+- Render backend config: [render.yaml](./render.yaml)
+- Vercel SPA routing config: [frontend/vercel.json](./frontend/vercel.json)
+ .github/
+   workflows/deploy.yml

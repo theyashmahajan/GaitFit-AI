@@ -50,12 +50,13 @@ def render_evidence_frame(
         if idx in used:
             idx = _nearest_unused(idx, used, len(poses))
         used.add(idx)
-        rendered = _render_single(job_id, key, idx, side, frames, poses, out_dir, label)
+        rendered = _render_single(job_id, key, idx, side, frames, poses, out_dir, label, event_key=key)
         if rendered:
             key_frames.append(rendered)
 
     hero["key_frames"] = key_frames
     hero["aspect_ratio"] = round(hero["width"] / hero["height"], 4) if hero["height"] else 1.0
+    hero["quality_trend"] = _quality_trend(poses, side)
     return hero
 
 
@@ -68,6 +69,7 @@ def _render_single(
     poses: list[dict[str, Any]],
     out_dir: Path,
     title: str,
+    event_key: str | None = None,
 ) -> dict[str, Any] | None:
     if idx < 0 or idx >= len(poses) or idx >= len(frames):
         return None
@@ -87,6 +89,8 @@ def _render_single(
     metrics = _angles_for_side(lm, side)
     if not metrics:
         return None
+    quality_score = _quality_score(lm, side)
+    caption = _event_caption(event_key, metrics, quality_score)
     _draw_label(canvas, _to_px(lm[f"{side}_knee"], w, h), f"knee {metrics['knee_deg']:.0f} deg")
     _draw_label(canvas, _to_px(lm[f"{side}_ankle"], w, h), f"ankle {metrics['ankle_deg']:.0f} deg")
     _draw_top_banner(canvas, title)
@@ -104,6 +108,8 @@ def _render_single(
         "side": side,
         "width": w,
         "height": h,
+        "quality_score": round(quality_score, 2),
+        "caption": caption,
     }
 
 
@@ -167,6 +173,43 @@ def _visibility_score(lm: dict[str, list[float]], side: str) -> float:
     return float(sum(lm[k][3] for k in keys if k in lm and len(lm[k]) > 3))
 
 
+def _quality_score(lm: dict[str, list[float]], side: str) -> float:
+    vis = _visibility_score(lm, side) / 5.0
+    jitter = 0.0
+    keys = [f"{side}_hip", f"{side}_knee", f"{side}_ankle", f"{side}_heel", f"{side}_foot_index"]
+    points = [lm[k] for k in keys if k in lm]
+    if len(points) >= 3:
+        xs = np.array([p[0] for p in points])
+        ys = np.array([p[1] for p in points])
+        spread = float(np.std(xs) + np.std(ys))
+        jitter = min(0.25, spread)
+    return float(max(0.0, min(1.0, 0.78 * vis + 0.22 * (1 - jitter))))
+
+
+def _event_caption(event_key: str | None, metrics: dict[str, float], quality: float) -> str:
+    knee = round(metrics["knee_deg"])
+    ankle = round(metrics["ankle_deg"])
+    quality_text = "high" if quality >= 0.8 else "medium" if quality >= 0.6 else "low"
+    if event_key == "initial_contact":
+        return f"Heel contact phase captured with ankle at {ankle} deg. Detection confidence is {quality_text}."
+    if event_key == "mid_stance":
+        return f"Mid stance frame with knee around {knee} deg, useful for stability assessment ({quality_text} confidence)."
+    if event_key == "toe_off":
+        return f"Toe-off phase shows propulsion angle near {ankle} deg with {quality_text} confidence."
+    return f"Representative gait frame with knee {knee} deg and ankle {ankle} deg ({quality_text} confidence)."
+
+
+def _quality_trend(poses: list[dict[str, Any]], side: str) -> list[dict[str, float]]:
+    trend: list[dict[str, float]] = []
+    for idx, p in enumerate(poses):
+        lm = p.get("landmarks", {})
+        if not lm:
+            continue
+        score = _quality_score(lm, side)
+        trend.append({"frame": float(idx), "score": round(score, 3)})
+    return trend
+
+
 def _angles_for_side(lm: dict[str, list[float]], side: str) -> dict[str, float] | None:
     required = [f"{side}_hip", f"{side}_knee", f"{side}_ankle", f"{side}_heel", f"{side}_foot_index"]
     if any(k not in lm for k in required):
@@ -207,4 +250,3 @@ def _draw_top_banner(img: np.ndarray, title: str) -> None:
     h, w = img.shape[:2]
     cv2.rectangle(img, (0, 0), (w, 58), (10, 10, 10), -1)
     cv2.putText(img, f"GaitFit AI {title}", (16, 38), cv2.FONT_HERSHEY_SIMPLEX, 0.82, (255, 255, 255), 2)
-

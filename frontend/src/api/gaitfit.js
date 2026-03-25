@@ -29,3 +29,7 @@ export async function fetchResults(jobId) {
   }
   return res.json();
 }
+
+export function reportPdfUrl(jobId) {
+  return `${API_BASE}/report/${jobId}.pdf`;
+}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import uuid
 from dataclasses import asdict
@@ -8,23 +9,31 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
+from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from dotenv import load_dotenv
 
 from gait_analyzer import analyze_gait
 from pose_extractor import extract_lower_body_landmarks
 from recommender import recommend_categories
+from report_builder import build_report_pdf
 from video_processor import MAX_SECONDS, extract_sampled_frames, normalize_video
 from utils.video_utils import read_video_meta
 from visualizer import render_evidence_frame
 
 MAX_UPLOAD_MB = 50
 ALLOWED_EXTENSIONS = {".mp4", ".mov", ".m4v"}
+MIN_MEAN_VISIBILITY = 0.45
+
+load_dotenv()
+origins_env = os.getenv("FRONTEND_ORIGINS", "http://localhost:5173")
+ALLOWED_ORIGINS = [v.strip() for v in origins_env.split(",") if v.strip()]
 
 app = FastAPI(title="GaitFit AI Backend", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -88,6 +97,20 @@ async def get_results(job_id: str) -> dict[str, Any]:
     return db[job_id]
 
 
+@app.get("/report/{job_id}.pdf")
+async def get_report_pdf(job_id: str) -> Response:
+    db = _read_db()
+    payload = db.get(job_id)
+    if not payload:
+        raise HTTPException(status_code=404, detail="Result not ready")
+    pdf = build_report_pdf(payload, OUT_DIR)
+    return Response(
+        content=pdf,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename=gaitfit_report_{job_id}.pdf"},
+    )
+
+
 def process_job(job_id: str, input_path: str) -> None:
     try:
         _update(job_id, "processing", 10, "Normalizing video")
@@ -103,6 +126,11 @@ def process_job(job_id: str, input_path: str) -> None:
 
         _update(job_id, "processing", 55, "Running pose extraction")
         poses = extract_lower_body_landmarks(frames)
+        mean_visibility = _mean_visibility(poses)
+        if mean_visibility < MIN_MEAN_VISIBILITY:
+            raise ValueError(
+                "Low body visibility detected. Use brighter lighting, keep full body in frame, and keep camera steady."
+            )
         pose_json_path = OUT_DIR / f"{job_id}_poses.json"
         pose_json_path.write_text(json.dumps(poses), encoding="utf-8")
 
@@ -145,6 +173,18 @@ def _summary(profile) -> str:
         f"Detected {profile.pronation_type} with {profile.strike_pattern} strike and "
         f"{profile.knee_alignment} knee alignment. {profile.gait_insight}"
     )
+
+
+def _mean_visibility(poses: list[dict[str, Any]]) -> float:
+    values: list[float] = []
+    for p in poses:
+        lm = p.get("landmarks", {})
+        for point in lm.values():
+            if len(point) > 3:
+                values.append(float(point[3]))
+    if not values:
+        return 0.0
+    return float(sum(values) / len(values))
 
 
 def _update(job_id: str, status: str, progress: int, message: str, error: str | None = None) -> None:

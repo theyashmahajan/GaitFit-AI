@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchStatus } from "../api/gaitfit";
 import ProgressStepper from "../components/ProgressStepper";
+import SiteFooter from "../components/SiteFooter";
 import { content } from "./content";
 
 function AnalysisPage() {
@@ -36,10 +37,20 @@ function AnalysisPage() {
   return (
     <main className="page">
       <ProgressStepper progress={status.progress || 0} message={status.message} text={t} />
-      {status.status === "failed" && <p className="error">{status.error || "Failed to process video."}</p>}
+      {status.status === "failed" && (
+        <section className="panel fail-panel">
+          <p className="error">{status.error || t.failedProcess}</p>
+          <ul className="fail-list">
+            <li>{t.failTip1}</li>
+            <li>{t.failTip2}</li>
+            <li>{t.failTip3}</li>
+          </ul>
+          <Link className="mini-cta" to="/upload">{t.retryUpload}</Link>
+        </section>
+      )}
+      <SiteFooter text={t} />
     </main>
   );
 }
 
 export default AnalysisPage;
-
