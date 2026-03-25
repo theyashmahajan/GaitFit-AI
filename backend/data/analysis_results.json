@@ -1,0 +1,590 @@
+{
+  "f653c882-83ef-4442-8a7e-670a2dff44cb": {
+    "job_id": "f653c882-83ef-4442-8a7e-670a2dff44cb",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.8539985235680809,
+      "cadence_spm": 155,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -109.43,
+        "knee_angle_deg": 109.55,
+        "hip_drop_ratio": 0.0454,
+        "strike_bias": 0.0196
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4
+    }
+  },
+  "b08a760c-e5c5-4fc5-b9f8-3d0e1e431a8d": {
+    "job_id": "b08a760c-e5c5-4fc5-b9f8-3d0e1e431a8d",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.8539985235680809,
+      "cadence_spm": 155,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -109.43,
+        "knee_angle_deg": 109.55,
+        "hip_drop_ratio": 0.0454,
+        "strike_bias": 0.0196
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4
+    }
+  },
+  "804cbd79-6188-4aca-9d60-2d14ede92dc6": {
+    "job_id": "804cbd79-6188-4aca-9d60-2d14ede92dc6",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.8539985235680809,
+      "cadence_spm": 155,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -109.43,
+        "knee_angle_deg": 109.55,
+        "hip_drop_ratio": 0.0454,
+        "strike_bias": 0.0196
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4
+    }
+  },
+  "8c8eba7d-5e57-44c1-9e30-e05a013fc829": {
+    "job_id": "8c8eba7d-5e57-44c1-9e30-e05a013fc829",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.8539985235680809,
+      "cadence_spm": 155,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -109.43,
+        "knee_angle_deg": 109.55,
+        "hip_drop_ratio": 0.0454,
+        "strike_bias": 0.0196
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "evidence": {
+      "image_url": "/assets/8c8eba7d-5e57-44c1-9e30-e05a013fc829_evidence.jpg",
+      "frame_index": 2,
+      "angles": {
+        "knee_deg": 168.6,
+        "ankle_deg": 49.6
+      },
+      "side": "right"
+    },
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4
+    },
+    "debug": {
+      "pose_file": "/assets/8c8eba7d-5e57-44c1-9e30-e05a013fc829_poses.json"
+    }
+  },
+  "fa23f44f-04eb-441e-a81c-9c868f9ef3a9": {
+    "job_id": "fa23f44f-04eb-441e-a81c-9c868f9ef3a9",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.9761603842255802,
+      "cadence_spm": 90,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -71.29,
+        "knee_angle_deg": 135.45,
+        "hip_drop_ratio": 0.0066,
+        "strike_bias": 0.0154
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "evidence": {
+      "id": "evidence",
+      "label": "Visual Evidence",
+      "image_url": "/assets/fa23f44f-04eb-441e-a81c-9c868f9ef3a9_evidence.jpg",
+      "frame_index": 19,
+      "angles": {
+        "knee_deg": 167.8,
+        "ankle_deg": 102.2
+      },
+      "side": "right",
+      "width": 720,
+      "height": 1280,
+      "key_frames": [
+        {
+          "id": "initial_contact",
+          "label": "Initial Contact",
+          "image_url": "/assets/fa23f44f-04eb-441e-a81c-9c868f9ef3a9_initial_contact.jpg",
+          "frame_index": 20,
+          "angles": {
+            "knee_deg": 163.5,
+            "ankle_deg": 80.6
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "mid_stance",
+          "label": "Mid Stance",
+          "image_url": "/assets/fa23f44f-04eb-441e-a81c-9c868f9ef3a9_mid_stance.jpg",
+          "frame_index": 19,
+          "angles": {
+            "knee_deg": 167.8,
+            "ankle_deg": 102.2
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "toe_off",
+          "label": "Toe Off",
+          "image_url": "/assets/fa23f44f-04eb-441e-a81c-9c868f9ef3a9_toe_off.jpg",
+          "frame_index": 9,
+          "angles": {
+            "knee_deg": 85.0,
+            "ankle_deg": 96.9
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        }
+      ],
+      "aspect_ratio": 0.5625
+    },
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4,
+      "width": 720,
+      "height": 1280,
+      "orientation": "portrait",
+      "aspect_ratio": 0.5625
+    },
+    "debug": {
+      "pose_file": "/assets/fa23f44f-04eb-441e-a81c-9c868f9ef3a9_poses.json"
+    }
+  },
+  "f3bf5333-07e6-4b04-bd41-d47480998460": {
+    "job_id": "f3bf5333-07e6-4b04-bd41-d47480998460",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.9761603842255802,
+      "cadence_spm": 90,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -71.29,
+        "knee_angle_deg": 135.45,
+        "hip_drop_ratio": 0.0066,
+        "strike_bias": 0.0154
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "evidence": {
+      "id": "evidence",
+      "label": "Visual Evidence",
+      "image_url": "/assets/f3bf5333-07e6-4b04-bd41-d47480998460_evidence.jpg",
+      "frame_index": 19,
+      "angles": {
+        "knee_deg": 167.8,
+        "ankle_deg": 102.2
+      },
+      "side": "right",
+      "width": 720,
+      "height": 1280,
+      "key_frames": [
+        {
+          "id": "initial_contact",
+          "label": "Initial Contact",
+          "image_url": "/assets/f3bf5333-07e6-4b04-bd41-d47480998460_initial_contact.jpg",
+          "frame_index": 20,
+          "angles": {
+            "knee_deg": 163.5,
+            "ankle_deg": 80.6
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "mid_stance",
+          "label": "Mid Stance",
+          "image_url": "/assets/f3bf5333-07e6-4b04-bd41-d47480998460_mid_stance.jpg",
+          "frame_index": 19,
+          "angles": {
+            "knee_deg": 167.8,
+            "ankle_deg": 102.2
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "toe_off",
+          "label": "Toe Off",
+          "image_url": "/assets/f3bf5333-07e6-4b04-bd41-d47480998460_toe_off.jpg",
+          "frame_index": 9,
+          "angles": {
+            "knee_deg": 85.0,
+            "ankle_deg": 96.9
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        }
+      ],
+      "aspect_ratio": 0.5625
+    },
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4,
+      "width": 720,
+      "height": 1280,
+      "orientation": "portrait",
+      "aspect_ratio": 0.5625
+    },
+    "debug": {
+      "pose_file": "/assets/f3bf5333-07e6-4b04-bd41-d47480998460_poses.json"
+    }
+  },
+  "97f26513-a334-4f10-8c88-99897f841fde": {
+    "job_id": "97f26513-a334-4f10-8c88-99897f841fde",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.9761603842255802,
+      "cadence_spm": 90,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -71.29,
+        "knee_angle_deg": 135.45,
+        "hip_drop_ratio": 0.0066,
+        "strike_bias": 0.0154
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "evidence": {
+      "id": "evidence",
+      "label": "Visual Evidence",
+      "image_url": "/assets/97f26513-a334-4f10-8c88-99897f841fde_evidence.jpg",
+      "frame_index": 19,
+      "angles": {
+        "knee_deg": 167.8,
+        "ankle_deg": 102.2
+      },
+      "side": "right",
+      "width": 720,
+      "height": 1280,
+      "key_frames": [
+        {
+          "id": "initial_contact",
+          "label": "Initial Contact",
+          "image_url": "/assets/97f26513-a334-4f10-8c88-99897f841fde_initial_contact.jpg",
+          "frame_index": 20,
+          "angles": {
+            "knee_deg": 163.5,
+            "ankle_deg": 80.6
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "mid_stance",
+          "label": "Mid Stance",
+          "image_url": "/assets/97f26513-a334-4f10-8c88-99897f841fde_mid_stance.jpg",
+          "frame_index": 19,
+          "angles": {
+            "knee_deg": 167.8,
+            "ankle_deg": 102.2
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "toe_off",
+          "label": "Toe Off",
+          "image_url": "/assets/97f26513-a334-4f10-8c88-99897f841fde_toe_off.jpg",
+          "frame_index": 9,
+          "angles": {
+            "knee_deg": 85.0,
+            "ankle_deg": 96.9
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        }
+      ],
+      "aspect_ratio": 0.5625
+    },
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4,
+      "width": 720,
+      "height": 1280,
+      "orientation": "portrait",
+      "aspect_ratio": 0.5625
+    },
+    "debug": {
+      "pose_file": "/assets/97f26513-a334-4f10-8c88-99897f841fde_poses.json"
+    }
+  },
+  "8af578c9-bcab-4eed-b0f7-c89a019512bf": {
+    "job_id": "8af578c9-bcab-4eed-b0f7-c89a019512bf",
+    "gait_profile": {
+      "pronation_type": "supination",
+      "strike_pattern": "heel",
+      "knee_alignment": "valgus",
+      "arch_type": "high",
+      "pelvic_symmetry": 0.9761603842255802,
+      "cadence_spm": 90,
+      "confidence": 0.98,
+      "gait_insight": "Outward foot loading pattern detected - possible supination.",
+      "raw_features": {
+        "ankle_tilt_deg": -71.29,
+        "knee_angle_deg": 135.45,
+        "hip_drop_ratio": 0.0066,
+        "strike_bias": 0.0154
+      }
+    },
+    "recommendations": [
+      {
+        "shoe_type": "cushioned",
+        "match_score": 0.98,
+        "why_this_fits": "Cushioned shoes absorb impact and help with outward-loading feet. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "stability",
+        "match_score": 0.539,
+        "why_this_fits": "Stability shoes can reduce inward roll and improve control through stance. Based on your supination pattern with heel strike."
+      },
+      {
+        "shoe_type": "motion_control",
+        "match_score": 0.539,
+        "why_this_fits": "Motion control shoes provide stronger structure for heavier inward collapse patterns. Based on your supination pattern with heel strike."
+      }
+    ],
+    "summary": "Detected supination with heel strike and valgus knee alignment. Outward foot loading pattern detected - possible supination.",
+    "evidence": {
+      "id": "evidence",
+      "label": "Visual Evidence",
+      "image_url": "/assets/8af578c9-bcab-4eed-b0f7-c89a019512bf_evidence.jpg",
+      "frame_index": 19,
+      "angles": {
+        "knee_deg": 167.8,
+        "ankle_deg": 102.2
+      },
+      "side": "right",
+      "width": 720,
+      "height": 1280,
+      "key_frames": [
+        {
+          "id": "initial_contact",
+          "label": "Initial Contact",
+          "image_url": "/assets/8af578c9-bcab-4eed-b0f7-c89a019512bf_initial_contact.jpg",
+          "frame_index": 20,
+          "angles": {
+            "knee_deg": 163.5,
+            "ankle_deg": 80.6
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "mid_stance",
+          "label": "Mid Stance",
+          "image_url": "/assets/8af578c9-bcab-4eed-b0f7-c89a019512bf_mid_stance.jpg",
+          "frame_index": 19,
+          "angles": {
+            "knee_deg": 167.8,
+            "ankle_deg": 102.2
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        },
+        {
+          "id": "toe_off",
+          "label": "Toe Off",
+          "image_url": "/assets/8af578c9-bcab-4eed-b0f7-c89a019512bf_toe_off.jpg",
+          "frame_index": 9,
+          "angles": {
+            "knee_deg": 85.0,
+            "ankle_deg": 96.9
+          },
+          "side": "right",
+          "width": 720,
+          "height": 1280
+        }
+      ],
+      "aspect_ratio": 0.5625
+    },
+    "meta": {
+      "sampled_frames": 44,
+      "duration_sec": 4.4,
+      "width": 720,
+      "height": 1280,
+      "orientation": "portrait",
+      "aspect_ratio": 0.5625
+    },
+    "debug": {
+      "pose_file": "/assets/8af578c9-bcab-4eed-b0f7-c89a019512bf_poses.json"
+    }
+  }
+}
