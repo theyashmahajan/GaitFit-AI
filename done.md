@@ -50,6 +50,8 @@
   - Added image-processing path in backend (`load_image_as_frame`) and static pose mode for photos.
   - Recalibrated hybrid classifier confidence to reduce repeated high confidence outputs.
   - Refined recommendation scoring/normalization to improve variation across different gait inputs.
+  - Added estimated shoe-size feature from pose proportions for photo/video uploads.
+  - Surfaced estimated size ranges (UK/US/EU), confidence, and disclaimer in result UI and PDF report.
 
 ## Remaining Work
 - Phase 5:

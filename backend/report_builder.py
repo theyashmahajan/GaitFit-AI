@@ -47,6 +47,31 @@ def build_report_pdf(payload: dict[str, Any], out_dir: Path) -> bytes:
     y = _multiline(c, 2 * cm, y, summary, width - 4 * cm, 14)
     y -= 0.4 * cm
 
+    size_est = payload.get("shoe_size_estimate", {})
+    if size_est:
+        c.setFont("Helvetica-Bold", 13)
+        c.drawString(2 * cm, y, "Estimated Shoe Size")
+        y -= 0.6 * cm
+        c.setFont("Helvetica", 11)
+        if size_est.get("estimated"):
+            _line(c, 2, y, f"Foot Length (estimated): {size_est.get('foot_length_cm', '-')} cm")
+            y -= 0.5 * cm
+            _line(c, 2, y, f"UK: {size_est.get('uk_size', '-')}")
+            y -= 0.5 * cm
+            _line(c, 2, y, f"US (Men): {size_est.get('us_men_size', '-')}")
+            y -= 0.5 * cm
+            _line(c, 2, y, f"US (Women): {size_est.get('us_women_size', '-')}")
+            y -= 0.5 * cm
+            _line(c, 2, y, f"EU: {size_est.get('eu_size', '-')}")
+            y -= 0.5 * cm
+            _line(c, 2, y, f"Confidence: {size_est.get('confidence', '-')}")
+            y -= 0.5 * cm
+            y = _multiline(c, 2 * cm, y, str(size_est.get("disclaimer", "")), width - 4 * cm, 12)
+            y -= 0.3 * cm
+        else:
+            y = _multiline(c, 2 * cm, y, str(size_est.get("message", "")), width - 4 * cm, 12)
+            y -= 0.3 * cm
+
     c.setFont("Helvetica-Bold", 13)
     c.drawString(2 * cm, y, "Top Recommendations")
     y -= 0.6 * cm
@@ -97,4 +122,3 @@ def _multiline(c: canvas.Canvas, x: float, y: float, text: str, max_width: float
         c.drawString(x, y, line)
         y -= line_height
     return y
-

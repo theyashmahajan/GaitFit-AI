@@ -18,6 +18,7 @@ from gait_analyzer import analyze_gait
 from pose_extractor import extract_lower_body_landmarks
 from recommender import recommend_categories
 from report_builder import build_report_pdf
+from size_estimator import estimate_shoe_size
 from video_processor import MAX_SECONDS, extract_sampled_frames, load_image_as_frame, normalize_video
 from utils.video_utils import read_video_meta
 from visualizer import render_evidence_frame
@@ -149,12 +150,14 @@ def process_job(job_id: str, input_path: str) -> None:
 
         _update(job_id, "processing", 88, "Generating recommendations")
         recs = recommend_categories(profile)
+        shoe_size_estimate = estimate_shoe_size(poses, input_type=str(meta.get("input_type", "video")))
 
         payload = {
             "job_id": job_id,
             "gait_profile": asdict(profile),
             "recommendations": [asdict(r) for r in recs],
             "summary": _summary(profile),
+            "shoe_size_estimate": shoe_size_estimate,
             "evidence": evidence,
             "meta": {
                 "sampled_frames": meta.get("sampled_frames", 0),

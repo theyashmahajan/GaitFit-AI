@@ -1,4 +1,4 @@
-function GaitReportCard({ profile, summary, text, trend = [] }) {
+function GaitReportCard({ profile, summary, text, trend = [], sizeEstimate = null }) {
   const confidencePct = Math.round((profile.confidence || 0) * 100);
   const symmetryPct = Math.round((profile.pelvic_symmetry || 0) * 100);
   return (
@@ -15,6 +15,7 @@ function GaitReportCard({ profile, summary, text, trend = [] }) {
         <span>{text.cadence}: {profile.cadence_spm} spm</span>
         <span>{text.symmetry}: {symmetryPct}%</span>
       </div>
+      <EstimatedShoeSize sizeEstimate={sizeEstimate} text={text} />
       <QualityTrend trend={trend} text={text} />
       <div className="grid2">
         <Metric label={text.pronation} value={profile.pronation_type} />
@@ -25,6 +26,30 @@ function GaitReportCard({ profile, summary, text, trend = [] }) {
         <Metric label={text.confidence} value={`${confidencePct}%`} />
       </div>
       <p className="muted">{summary}</p>
+    </div>
+  );
+}
+
+function EstimatedShoeSize({ sizeEstimate, text }) {
+  if (!sizeEstimate) return null;
+  return (
+    <div className="size-estimate">
+      <h3>{text.estimatedShoeSize || "Estimated Shoe Size"}</h3>
+      {sizeEstimate.estimated ? (
+        <>
+          <div className="quick-stats">
+            <span>{text.footLength || "Foot Length"}: {sizeEstimate.foot_length_cm} cm</span>
+            <span>UK: {sizeEstimate.uk_size}</span>
+            <span>US(M): {sizeEstimate.us_men_size}</span>
+            <span>US(W): {sizeEstimate.us_women_size}</span>
+            <span>EU: {sizeEstimate.eu_size}</span>
+            <span>{text.confidence}: {sizeEstimate.confidence}</span>
+          </div>
+          <p className="muted size-note">{sizeEstimate.disclaimer}</p>
+        </>
+      ) : (
+        <p className="muted size-note">{sizeEstimate.message || (text.sizeUnavailable || "Size estimate unavailable.")}</p>
+      )}
     </div>
   );
 }
@@ -58,4 +83,3 @@ function QualityTrend({ trend, text }) {
 }
 
 export default GaitReportCard;
-

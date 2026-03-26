@@ -46,6 +46,7 @@ function ResultsPage() {
         summary={data.summary}
         text={t}
         trend={data?.evidence?.quality_trend || []}
+        sizeEstimate={data?.shoe_size_estimate || null}
       />
       <div className="action-row">
         <button className="mini-cta" onClick={downloadJsonReport}>
