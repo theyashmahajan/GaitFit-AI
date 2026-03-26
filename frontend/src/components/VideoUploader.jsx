@@ -24,7 +24,7 @@ function VideoUploader({ onFileSelect, text }) {
     >
       <input
         type="file"
-        accept=".mp4,.mov,.m4v"
+        accept=".mp4,.mov,.m4v,.jpg,.jpeg,.png,.webp"
         onChange={(e) => handleFile(e.target.files?.[0])}
         hidden
       />
@@ -35,4 +35,3 @@ function VideoUploader({ onFileSelect, text }) {
 }
 
 export default VideoUploader;
-

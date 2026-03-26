@@ -46,6 +46,10 @@
   - Added `shoe_catalogue.json` category dataset scaffold.
   - Added `test_gait_analyzer.py` unit test.
   - Added GitHub workflow scaffold (`.github/workflows/deploy.yml`).
+  - Added dual media support for upload: video + single image input.
+  - Added image-processing path in backend (`load_image_as_frame`) and static pose mode for photos.
+  - Recalibrated hybrid classifier confidence to reduce repeated high confidence outputs.
+  - Refined recommendation scoring/normalization to improve variation across different gait inputs.
 
 ## Remaining Work
 - Phase 5:

@@ -82,6 +82,27 @@ def extract_sampled_frames(video_path: str) -> tuple[list[np.ndarray], dict]:
     return frames, meta
 
 
+def load_image_as_frame(image_path: str) -> tuple[list[np.ndarray], dict]:
+    frame = cv2.imread(image_path)
+    if frame is None:
+        raise ValueError("Unable to read image file.")
+    h, w = frame.shape[:2]
+    orientation = "portrait" if h > w else "landscape"
+    meta = {
+        "duration_sec": 0.0,
+        "fps": 0.0,
+        "frame_count": 1,
+        "width": int(w),
+        "height": int(h),
+        "orientation": orientation,
+        "aspect_ratio": float(w / h) if h else 0.0,
+        "sampled_fps": 1.0,
+        "sampled_frames": 1,
+        "input_type": "image",
+    }
+    return [frame], meta
+
+
 def _choose_target_size(meta: dict) -> tuple[int, int]:
     orientation = meta.get("orientation", "landscape")
     return PORTRAIT_TARGET if orientation == "portrait" else LANDSCAPE_TARGET

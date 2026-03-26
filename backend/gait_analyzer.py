@@ -28,7 +28,7 @@ class HybridGaitClassifier:
         supination = rng.normal([-11, 176, 0.04, 0.9, 158, 0.2], [4, 3, 0.02, 0.04, 8, 0.3], (80, 6))
         x = np.vstack([neutral, overpronation, supination])
         y = np.array(["neutral"] * 80 + ["overpronation"] * 80 + ["supination"] * 80)
-        model = LogisticRegression(max_iter=500)
+        model = LogisticRegression(max_iter=1200, solver="liblinear")
         model.fit(x, y)
         return model
 
@@ -36,21 +36,22 @@ class HybridGaitClassifier:
         vector = np.array(
             [[f.ankle_tilt_deg, f.knee_angle_deg, f.hip_drop_ratio, f.stride_symmetry, f.cadence_spm, f.strike_bias]]
         )
-        rule_label = _pronation_from_rules(f.ankle_tilt_deg)
-        rule_conf = _rule_confidence(f.ankle_tilt_deg)
+        rule_scores = _rule_scores(f)
         if self.model is None:
-            return rule_label, rule_conf
+            label = max(rule_scores, key=rule_scores.get)
+            top2 = sorted(rule_scores.values(), reverse=True)[:2]
+            confidence = clamp(0.42 + (top2[0] - top2[1]) * 0.5, 0.35, 0.88)
+            return label, confidence
+
         probs = self.model.predict_proba(vector)[0]
-        labels = self.model.classes_
-        ml_idx = int(np.argmax(probs))
-        ml_label = str(labels[ml_idx])
-        ml_conf = float(probs[ml_idx])
-        # Blend rule and ML confidence while allowing ML to override borderline rule outcomes.
-        if abs(f.ankle_tilt_deg) > 10:
-            label = rule_label
-        else:
-            label = ml_label
-        confidence = clamp(0.6 * ml_conf + 0.4 * rule_conf, 0.0, 1.0)
+        labels = [str(l) for l in self.model.classes_]
+        ml_scores = {label: float(probs[idx]) for idx, label in enumerate(labels)}
+        merged = {}
+        for label in ("neutral", "overpronation", "supination"):
+            merged[label] = 0.58 * ml_scores.get(label, 0.0) + 0.42 * rule_scores.get(label, 0.0)
+        label = max(merged, key=merged.get)
+        top2 = sorted(merged.values(), reverse=True)[:2]
+        confidence = clamp(0.4 + (top2[0] - top2[1]) * 0.9, 0.32, 0.9)
         return label, confidence
 
 
@@ -66,12 +67,30 @@ def _rule_confidence(ankle_tilt_deg: float) -> float:
     return clamp(abs(ankle_tilt_deg) / 18.0, 0.35, 0.95)
 
 
+def _rule_scores(f: GaitFeatures) -> dict[str, float]:
+    scores = {"neutral": 0.35, "overpronation": 0.35, "supination": 0.35}
+    if f.ankle_tilt_deg >= 7:
+        scores["overpronation"] += min(0.45, (f.ankle_tilt_deg - 7) / 14.0)
+    elif f.ankle_tilt_deg <= -7:
+        scores["supination"] += min(0.45, (abs(f.ankle_tilt_deg) - 7) / 14.0)
+    else:
+        scores["neutral"] += 0.25
+
+    if f.knee_angle_deg < 169:
+        scores["overpronation"] += 0.15
+    if f.knee_angle_deg > 180:
+        scores["supination"] += 0.12
+    if f.stride_symmetry >= 0.88:
+        scores["neutral"] += 0.08
+    return scores
+
+
 def analyze_gait(frame_poses: list[dict[str, Any]], sampled_fps: float = 10.0) -> tuple[GaitProfile, GaitFeatures]:
     if not frame_poses:
         raise ValueError("No pose data extracted from video.")
     cleaned = [p for p in frame_poses if p.get("landmarks")]
-    if len(cleaned) < 8:
-        raise ValueError("Insufficient detectable body frames. Please upload a clearer side-view walking video.")
+    if len(cleaned) < 1:
+        raise ValueError("No detectable body frame. Please upload a clearer side-view image/video.")
 
     ankle_tilts: list[float] = []
     knee_angles: list[float] = []
@@ -104,13 +123,13 @@ def analyze_gait(frame_poses: list[dict[str, Any]], sampled_fps: float = 10.0) -
         heel_toe_bias = ((l_toe[1] - l_heel[1]) + (r_toe[1] - r_heel[1])) / 2.0
         strikes.append(float(heel_toe_bias))
 
-    ankle_sm = _smooth(ankle_tilts)
-    knee_sm = _smooth(knee_angles)
-    hip_sm = _smooth(hip_drops)
+    ankle_sm = _smooth(ankle_tilts) if len(ankle_tilts) >= 7 else np.array(ankle_tilts, dtype=float)
+    knee_sm = _smooth(knee_angles) if len(knee_angles) >= 7 else np.array(knee_angles, dtype=float)
+    hip_sm = _smooth(hip_drops) if len(hip_drops) >= 7 else np.array(hip_drops, dtype=float)
 
-    cadence = _estimate_cadence(ankle_sm, sampled_fps)
+    cadence = _estimate_cadence(ankle_sm, sampled_fps) if len(cleaned) >= 8 else 120
     symmetry = clamp(1.0 - float(np.std(hip_sm) * 4), 0.0, 1.0)
-    strike_bias = float(np.mean(strikes))
+    strike_bias = float(np.mean(strikes)) if strikes else 0.0
     strike_pattern = "heel" if strike_bias > 0.005 else "forefoot" if strike_bias < -0.005 else "midfoot"
 
     avg_knee = float(np.mean(knee_sm))
@@ -136,6 +155,12 @@ def analyze_gait(frame_poses: list[dict[str, Any]], sampled_fps: float = 10.0) -
 
     classifier = HybridGaitClassifier()
     pronation_type, confidence = classifier.predict(features)
+    confidence = _adjust_confidence_for_signal_quality(
+        base_confidence=confidence,
+        frame_count=len(cleaned),
+        ankle_series=ankle_sm,
+        knee_series=knee_sm,
+    )
 
     insight = _gait_insight(features, pronation_type, knee_alignment)
     profile = GaitProfile(
@@ -155,6 +180,29 @@ def analyze_gait(frame_poses: list[dict[str, Any]], sampled_fps: float = 10.0) -
         },
     )
     return profile, features
+
+
+def _adjust_confidence_for_signal_quality(
+    base_confidence: float,
+    frame_count: int,
+    ankle_series: np.ndarray,
+    knee_series: np.ndarray,
+) -> float:
+    if frame_count <= 2:
+        frame_factor = 0.65
+    elif frame_count < 8:
+        frame_factor = 0.78
+    elif frame_count < 18:
+        frame_factor = 0.9
+    else:
+        frame_factor = 1.0
+
+    ankle_var = float(np.std(ankle_series)) if len(ankle_series) else 0.0
+    knee_var = float(np.std(knee_series)) if len(knee_series) else 0.0
+    variation_factor = 0.9 + min(0.12, (ankle_var + knee_var * 0.02) * 0.04)
+    adjusted = base_confidence * frame_factor * variation_factor
+    low, high = (0.25, 0.72) if frame_count < 8 else (0.3, 0.92)
+    return clamp(adjusted, low, high)
 
 
 def _smooth(values: list[float]) -> np.ndarray:
@@ -184,4 +232,3 @@ def _gait_insight(features: GaitFeatures, pronation_type: str, knee_alignment: s
     if features.stride_symmetry < 0.75:
         return "Minor left-right asymmetry detected in pelvic movement."
     return "Balanced gait pattern detected with neutral foot mechanics."
-

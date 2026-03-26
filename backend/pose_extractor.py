@@ -31,11 +31,13 @@ class FramePose:
     landmarks: dict[str, list[float]]
 
 
-def extract_lower_body_landmarks(frames: list[Any]) -> list[dict[str, Any]]:
+def extract_lower_body_landmarks(frames: list[Any], static_image_mode: bool | None = None) -> list[dict[str, Any]]:
     if mp is None:
         raise RuntimeError("MediaPipe is not installed. Run `pip install mediapipe`.")
+    if static_image_mode is None:
+        static_image_mode = len(frames) <= 2
     pose = mp.solutions.pose.Pose(
-        static_image_mode=False,
+        static_image_mode=static_image_mode,
         model_complexity=1,
         enable_segmentation=False,
         min_detection_confidence=0.5,
@@ -54,4 +56,3 @@ def extract_lower_body_landmarks(frames: list[Any]) -> list[dict[str, Any]]:
         output.append(asdict(FramePose(frame=idx, landmarks=landmarks)))
     pose.close()
     return output
-

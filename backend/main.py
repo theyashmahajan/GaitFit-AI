@@ -18,12 +18,14 @@ from gait_analyzer import analyze_gait
 from pose_extractor import extract_lower_body_landmarks
 from recommender import recommend_categories
 from report_builder import build_report_pdf
-from video_processor import MAX_SECONDS, extract_sampled_frames, normalize_video
+from video_processor import MAX_SECONDS, extract_sampled_frames, load_image_as_frame, normalize_video
 from utils.video_utils import read_video_meta
 from visualizer import render_evidence_frame
 
 MAX_UPLOAD_MB = 50
-ALLOWED_EXTENSIONS = {".mp4", ".mov", ".m4v"}
+VIDEO_EXTENSIONS = {".mp4", ".mov", ".m4v"}
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+ALLOWED_EXTENSIONS = VIDEO_EXTENSIONS | IMAGE_EXTENSIONS
 MIN_MEAN_VISIBILITY = 0.45
 
 load_dotenv()
@@ -62,7 +64,7 @@ async def health() -> dict[str, str]:
 async def upload_video(background_tasks: BackgroundTasks, file: UploadFile = File(...)) -> dict[str, str]:
     suffix = Path(file.filename or "").suffix.lower()
     if suffix not in ALLOWED_EXTENSIONS:
-        raise HTTPException(status_code=400, detail="Invalid file type. Allowed: mp4, mov, m4v.")
+        raise HTTPException(status_code=400, detail="Invalid file type. Allowed: mp4, mov, m4v, jpg, jpeg, png, webp.")
 
     data = await file.read()
     if len(data) > MAX_UPLOAD_MB * 1024 * 1024:
@@ -71,10 +73,11 @@ async def upload_video(background_tasks: BackgroundTasks, file: UploadFile = Fil
     job_id = str(uuid.uuid4())
     src = TMP_DIR / f"{job_id}{suffix}"
     src.write_bytes(data)
-    meta = read_video_meta(str(src))
-    if (meta.get("duration_sec") or 0) > MAX_SECONDS:
-        src.unlink(missing_ok=True)
-        raise HTTPException(status_code=400, detail="Video duration must be 10 seconds or less.")
+    if suffix in VIDEO_EXTENSIONS:
+        meta = read_video_meta(str(src))
+        if (meta.get("duration_sec") or 0) > MAX_SECONDS:
+            src.unlink(missing_ok=True)
+            raise HTTPException(status_code=400, detail="Video duration must be 10 seconds or less.")
 
     JOBS[job_id] = {"status": "queued", "progress": 3, "message": "Video received", "error": None}
     background_tasks.add_task(process_job, job_id, str(src))
@@ -113,19 +116,25 @@ async def get_report_pdf(job_id: str) -> Response:
 
 def process_job(job_id: str, input_path: str) -> None:
     try:
-        _update(job_id, "processing", 10, "Normalizing video")
-        normalized_path = str(OUT_DIR / f"{job_id}_normalized.mp4")
-        normalize_video(input_path, normalized_path)
+        suffix = Path(input_path).suffix.lower()
+        if suffix in VIDEO_EXTENSIONS:
+            _update(job_id, "processing", 10, "Normalizing video")
+            normalized_path = str(OUT_DIR / f"{job_id}_normalized.mp4")
+            normalize_video(input_path, normalized_path)
 
-        _update(job_id, "processing", 35, "Extracting frames")
-        frames, meta = extract_sampled_frames(normalized_path)
-        if not frames:
-            raise ValueError("No frames extracted from video.")
-        if (meta.get("duration_sec") or 0) > MAX_SECONDS + 0.3:
-            raise ValueError("Please upload a clip up to 10 seconds.")
+            _update(job_id, "processing", 35, "Extracting frames")
+            frames, meta = extract_sampled_frames(normalized_path)
+            if not frames:
+                raise ValueError("No frames extracted from video.")
+            if (meta.get("duration_sec") or 0) > MAX_SECONDS + 0.3:
+                raise ValueError("Please upload a clip up to 10 seconds.")
+        else:
+            _update(job_id, "processing", 25, "Reading image")
+            frames, meta = load_image_as_frame(input_path)
+            normalized_path = ""
 
         _update(job_id, "processing", 55, "Running pose extraction")
-        poses = extract_lower_body_landmarks(frames)
+        poses = extract_lower_body_landmarks(frames, static_image_mode=(suffix in IMAGE_EXTENSIONS))
         mean_visibility = _mean_visibility(poses)
         if mean_visibility < MIN_MEAN_VISIBILITY:
             raise ValueError(
@@ -154,6 +163,7 @@ def process_job(job_id: str, input_path: str) -> None:
                 "height": meta.get("height", 0),
                 "orientation": meta.get("orientation", "unknown"),
                 "aspect_ratio": round(meta.get("aspect_ratio", 0.0), 4),
+                "input_type": meta.get("input_type", "video"),
             },
             "debug": {"pose_file": f"/assets/{pose_json_path.name}"},
         }
