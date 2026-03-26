@@ -32,11 +32,12 @@ def render_evidence_frame(
     frames: list[np.ndarray],
     poses: list[dict[str, Any]],
     out_dir: Path,
+    gait_events: dict[str, list[int]] | None = None,
 ) -> dict[str, Any]:
     if not frames or not poses:
         return {}
     side = _dominant_side(poses)
-    key_indices = _pick_key_frames(poses, side)
+    key_indices = _pick_key_frames(poses, side, gait_events=gait_events)
     hero_idx = key_indices.get("mid_stance", _pick_best_frame(poses))
 
     hero = _render_single(job_id, "evidence", hero_idx, side, frames, poses, out_dir, "Visual Evidence")
@@ -57,6 +58,8 @@ def render_evidence_frame(
     hero["key_frames"] = key_frames
     hero["aspect_ratio"] = round(hero["width"] / hero["height"], 4) if hero["height"] else 1.0
     hero["quality_trend"] = _quality_trend(poses, side)
+    hero["timeline_frames"] = _build_timeline_frames(job_id, frames, poses, out_dir, side)
+    hero["event_markers"] = key_indices
     return hero
 
 
@@ -113,7 +116,18 @@ def _render_single(
     }
 
 
-def _pick_key_frames(poses: list[dict[str, Any]], side: str) -> dict[str, int]:
+def _pick_key_frames(
+    poses: list[dict[str, Any]],
+    side: str,
+    gait_events: dict[str, list[int]] | None = None,
+) -> dict[str, int]:
+    if gait_events:
+        hs = gait_events.get("heel_strike") or []
+        ms = gait_events.get("mid_stance") or []
+        to = gait_events.get("toe_off") or []
+        if hs and ms and to:
+            return {"initial_contact": int(hs[0]), "mid_stance": int(ms[0]), "toe_off": int(to[0])}
+
     candidates = []
     for i, p in enumerate(poses):
         lm = p.get("landmarks", {})
@@ -143,6 +157,26 @@ def _pick_key_frames(poses: list[dict[str, Any]], side: str) -> dict[str, int]:
     mid = min(candidates, key=lambda c: (c["align"], -c["vis"]))["idx"]
     toe = max(candidates, key=lambda c: (c["toe_y"] - c["heel_y"], c["vis"]))["idx"]
     return {"initial_contact": initial, "mid_stance": mid, "toe_off": toe}
+
+
+def _build_timeline_frames(
+    job_id: str,
+    frames: list[np.ndarray],
+    poses: list[dict[str, Any]],
+    out_dir: Path,
+    side: str,
+) -> list[dict[str, Any]]:
+    if len(frames) <= 3:
+        return []
+    slots = min(12, len(frames))
+    picks = sorted(set(np.linspace(0, len(frames) - 1, num=slots, dtype=int).tolist()))
+    items: list[dict[str, Any]] = []
+    for idx in picks:
+        rendered = _render_single(job_id, f"timeline_{idx}", idx, side, frames, poses, out_dir, f"Frame {idx}")
+        if not rendered:
+            continue
+        items.append(rendered)
+    return items
 
 
 def _nearest_unused(seed: int, used: set[int], total: int) -> int:

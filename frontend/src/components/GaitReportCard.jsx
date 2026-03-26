@@ -1,6 +1,7 @@
 function GaitReportCard({ profile, summary, text, trend = [], sizeEstimate = null }) {
   const confidencePct = Math.round((profile.confidence || 0) * 100);
   const symmetryPct = Math.round((profile.pelvic_symmetry || 0) * 100);
+  const asymmetry = Math.round(profile.asymmetry_score || 0);
   return (
     <div className="panel">
       <h2>{text.gaitReport}</h2>
@@ -14,6 +15,7 @@ function GaitReportCard({ profile, summary, text, trend = [], sizeEstimate = nul
       <div className="quick-stats">
         <span>{text.cadence}: {profile.cadence_spm} spm</span>
         <span>{text.symmetry}: {symmetryPct}%</span>
+        <span>{text.asymmetry || "Asymmetry"}: {asymmetry}%</span>
       </div>
       <EstimatedShoeSize sizeEstimate={sizeEstimate} text={text} />
       <QualityTrend trend={trend} text={text} />
@@ -24,6 +26,8 @@ function GaitReportCard({ profile, summary, text, trend = [], sizeEstimate = nul
         <Metric label={text.arch} value={profile.arch_type} />
         <Metric label={text.cadence} value={`${profile.cadence_spm} spm`} />
         <Metric label={text.confidence} value={`${confidencePct}%`} />
+        <Metric label={text.inputMode || "Input Mode"} value={profile.input_mode} />
+        <Metric label={text.asymmetry || "Asymmetry"} value={`${asymmetry}%`} />
       </div>
       <p className="muted">{summary}</p>
     </div>

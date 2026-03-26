@@ -27,5 +27,6 @@ def test_analyze_gait_returns_profile_and_features():
     assert profile.pronation_type in {"neutral", "overpronation", "supination"}
     assert profile.strike_pattern in {"heel", "midfoot", "forefoot"}
     assert 0 <= profile.confidence <= 1
+    assert profile.input_mode == "video"
+    assert isinstance(profile.gait_events, dict)
     assert isinstance(features.cadence_spm, int)
-

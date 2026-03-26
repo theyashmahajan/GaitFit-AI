@@ -52,6 +52,17 @@
   - Refined recommendation scoring/normalization to improve variation across different gait inputs.
   - Added estimated shoe-size feature from pose proportions for photo/video uploads.
   - Surfaced estimated size ranges (UK/US/EU), confidence, and disclaimer in result UI and PDF report.
+  - Added backend pre-flight capture quality checker (lighting, body visibility, camera stability, side-view confidence).
+  - Added quality short-circuit path: failed quality now returns `quality_report` and skips full analysis.
+  - Added gait-cycle event detection using ankle trajectories (`heel_strike`, `mid_stance`, `toe_off`).
+  - Added per-leg gait metrics and asymmetry score in `GaitProfile`.
+  - Added input-mode-aware pipeline behavior (`video` vs `photo`) with capped confidence for photo mode.
+  - Added upload Capture Guide modal and frontend pre-submit duration/size validation.
+  - Added interactive evidence timeline with event markers and frame selection.
+  - Added explainability finding cards (detected/why/action).
+  - Added trend dashboard from local scan history (`localStorage`).
+  - Added recommendation side-by-side comparison UI.
+  - Added conversion-focused CTA action section on results page.
 
 ## Remaining Work
 - Phase 5:

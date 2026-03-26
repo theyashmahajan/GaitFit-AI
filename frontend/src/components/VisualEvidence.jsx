@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import GaitTimeline from "./GaitTimeline";
 
 function VisualEvidence({ evidence, imageSrc, text, apiBase }) {
   const frames = useMemo(() => {
@@ -13,7 +14,9 @@ function VisualEvidence({ evidence, imageSrc, text, apiBase }) {
       width: evidence.width,
       height: evidence.height
     };
-    return [hero, ...(Array.isArray(evidence.key_frames) ? evidence.key_frames : [])];
+    const key = Array.isArray(evidence.key_frames) ? evidence.key_frames : [];
+    const timeline = Array.isArray(evidence.timeline_frames) ? evidence.timeline_frames : [];
+    return [hero, ...key, ...timeline];
   }, [evidence, text.visualTitle]);
 
   const [activeId, setActiveId] = useState("hero");
@@ -48,13 +51,22 @@ function VisualEvidence({ evidence, imageSrc, text, apiBase }) {
           {text.downloadEvidence}
         </a>
       </div>
+      <div className="key-frames">
+        <GaitTimeline
+          frames={frames}
+          activeId={activeId}
+          onSelect={setActiveId}
+          eventMarkers={evidence.event_markers || {}}
+          text={text}
+        />
+      </div>
 
       {frames.length > 1 && (
         <div className="key-frames">
           <h3>{text.keyFramesTitle}</h3>
           <p className="muted key-note">{text.clickToFocus}</p>
           <div className="key-grid">
-            {frames.slice(1).map((k) => {
+            {(Array.isArray(evidence.key_frames) ? evidence.key_frames : []).map((k) => {
               const ksrc = `${apiBase}${k.image_url}`;
               const activeClass = activeId === k.id ? "active" : "";
               return (

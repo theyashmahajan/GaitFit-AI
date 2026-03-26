@@ -40,6 +40,15 @@ function AnalysisPage() {
       {status.status === "failed" && (
         <section className="panel fail-panel">
           <p className="error">{status.error || t.failedProcess}</p>
+          {status.quality_report && (
+            <div className="quality-block">
+              <strong>{t.captureQualityTitle || "Capture Quality Report"}</strong>
+              <p className="muted">{t.captureScore || "Score"}: {status.quality_report.score}/100</p>
+              <ul className="fail-list">
+                {(status.quality_report.issues || []).map((issue) => <li key={issue}>{issue}</li>)}
+              </ul>
+            </div>
+          )}
           <ul className="fail-list">
             <li>{t.failTip1}</li>
             <li>{t.failTip2}</li>

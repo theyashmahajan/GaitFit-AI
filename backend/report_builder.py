@@ -36,6 +36,10 @@ def build_report_pdf(payload: dict[str, Any], out_dir: Path) -> bytes:
     y -= 0.5 * cm
     _line(c, 2, y, f"Knee Alignment: {profile.get('knee_alignment', '-')}")
     y -= 0.5 * cm
+    _line(c, 2, y, f"Input Mode: {profile.get('input_mode', '-')}")
+    y -= 0.5 * cm
+    _line(c, 2, y, f"Asymmetry Score: {profile.get('asymmetry_score', '-')}")
+    y -= 0.5 * cm
     _line(c, 2, y, f"Cadence: {profile.get('cadence_spm', '-')}")
     y -= 0.7 * cm
 

@@ -893,6 +893,229 @@ h3 {
   font-size: 0.82rem;
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.78);
+  display: grid;
+  place-items: center;
+  z-index: 30;
+  padding: 12px;
+}
+
+.guide-modal {
+  width: min(760px, 100%);
+  display: grid;
+  gap: 12px;
+}
+
+.guide-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.guide-svg {
+  width: 100%;
+  height: 180px;
+}
+
+.guide-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.timeline-wrap {
+  display: grid;
+  gap: 10px;
+}
+
+.timeline-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.timeline-track {
+  position: relative;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.timeline-dot {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 0;
+  cursor: pointer;
+  background: #94a3b8;
+}
+
+.timeline-dot.heel { background: #2563eb; }
+.timeline-dot.mid { background: #22c55e; }
+.timeline-dot.toe { background: #f97316; }
+.timeline-dot.active {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.24);
+}
+
+.timeline-legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 999px;
+  margin-right: 4px;
+}
+.dot.heel { background: #2563eb; }
+.dot.mid { background: #22c55e; }
+.dot.toe { background: #f97316; }
+
+.finding-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.finding-card {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.finding-toggle {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  color: #f8fafc;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.finding-body {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 12px;
+  display: grid;
+  gap: 6px;
+}
+
+.compare-picks {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.compare-picks select {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  padding: 8px 10px;
+}
+
+.compare-grid {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.compare-col {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.compare-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.compare-benefits {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+.trend-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.spark-card {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.history-list {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.history-item {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  color: #dbeafe;
+  padding: 8px 10px;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.cta-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.cta-tile {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.46);
+  color: #e2e8f0;
+  padding: 12px;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.quality-block {
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  border-radius: 10px;
+  padding: 10px;
+  background: rgba(127, 29, 29, 0.16);
+}
+
 @keyframes pulse {
   0%,
   100% {
@@ -941,6 +1164,10 @@ h3 {
   }
   .proof-grid {
     grid-template-columns: 1fr;
+  }
+  .timeline-dot {
+    width: 20px;
+    height: 20px;
   }
   .evidence-chips span {
     font-size: 0.8rem;

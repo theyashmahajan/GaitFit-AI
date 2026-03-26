@@ -23,7 +23,13 @@ class GaitProfile:
     pelvic_symmetry: float
     cadence_spm: int
     confidence: float
+    confidence_cap: float
+    input_mode: str
     gait_insight: str
+    gait_events: dict[str, list[int]] = field(default_factory=dict)
+    left_leg: dict[str, float] = field(default_factory=dict)
+    right_leg: dict[str, float] = field(default_factory=dict)
+    asymmetry_score: float = 0.0
     raw_features: dict[str, Any] = field(default_factory=dict)
 
 
@@ -32,4 +38,3 @@ class Recommendation:
     shoe_type: str
     match_score: float
     why_this_fits: str
-

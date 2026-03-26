@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 
 from gait_analyzer import analyze_gait
 from pose_extractor import extract_lower_body_landmarks
+from quality_checker import check as check_quality
 from recommender import recommend_categories
 from report_builder import build_report_pdf
 from size_estimator import estimate_shoe_size
@@ -118,10 +119,24 @@ async def get_report_pdf(job_id: str) -> Response:
 def process_job(job_id: str, input_path: str) -> None:
     try:
         suffix = Path(input_path).suffix.lower()
-        if suffix in VIDEO_EXTENSIONS:
+        input_mode = "video" if suffix in VIDEO_EXTENSIONS else "photo"
+        if input_mode == "video":
             _update(job_id, "processing", 10, "Normalizing video")
             normalized_path = str(OUT_DIR / f"{job_id}_normalized.mp4")
             normalize_video(input_path, normalized_path)
+
+            _update(job_id, "processing", 22, "Running capture quality checks")
+            quality_report = check_quality(normalized_path)
+            if not quality_report.get("passed", False):
+                _update(
+                    job_id,
+                    "failed",
+                    100,
+                    "Capture quality check failed",
+                    error="Please retake the video with better capture conditions.",
+                    quality_report=quality_report,
+                )
+                return
 
             _update(job_id, "processing", 35, "Extracting frames")
             frames, meta = extract_sampled_frames(normalized_path)
@@ -145,12 +160,22 @@ def process_job(job_id: str, input_path: str) -> None:
         pose_json_path.write_text(json.dumps(poses), encoding="utf-8")
 
         _update(job_id, "processing", 75, "Analyzing gait features")
-        profile, _features = analyze_gait(poses, sampled_fps=float(meta.get("sampled_fps", 10.0)))
-        evidence = render_evidence_frame(job_id=job_id, frames=frames, poses=poses, out_dir=OUT_DIR)
+        profile, _features = analyze_gait(
+            poses,
+            sampled_fps=float(meta.get("sampled_fps", 10.0)),
+            input_mode=input_mode,
+        )
+        evidence = render_evidence_frame(
+            job_id=job_id,
+            frames=frames,
+            poses=poses,
+            out_dir=OUT_DIR,
+            gait_events=profile.gait_events,
+        )
 
         _update(job_id, "processing", 88, "Generating recommendations")
         recs = recommend_categories(profile)
-        shoe_size_estimate = estimate_shoe_size(poses, input_type=str(meta.get("input_type", "video")))
+        shoe_size_estimate = estimate_shoe_size(poses, input_type=str(meta.get("input_type", input_mode)))
 
         payload = {
             "job_id": job_id,
@@ -182,10 +207,13 @@ def process_job(job_id: str, input_path: str) -> None:
 
 
 def _summary(profile) -> str:
-    return (
+    base = (
         f"Detected {profile.pronation_type} with {profile.strike_pattern} strike and "
         f"{profile.knee_alignment} knee alignment. {profile.gait_insight}"
     )
+    if getattr(profile, "input_mode", "video") == "photo":
+        return f"{base} This result is from a single photo and has lower confidence."
+    return base
 
 
 def _mean_visibility(poses: list[dict[str, Any]]) -> float:
@@ -200,10 +228,19 @@ def _mean_visibility(poses: list[dict[str, Any]]) -> float:
     return float(sum(values) / len(values))
 
 
-def _update(job_id: str, status: str, progress: int, message: str, error: str | None = None) -> None:
+def _update(
+    job_id: str,
+    status: str,
+    progress: int,
+    message: str,
+    error: str | None = None,
+    quality_report: dict[str, Any] | None = None,
+) -> None:
     if job_id not in JOBS:
         JOBS[job_id] = {}
-    JOBS[job_id].update({"status": status, "progress": progress, "message": message, "error": error})
+    JOBS[job_id].update(
+        {"status": status, "progress": progress, "message": message, "error": error, "quality_report": quality_report}
+    )
 
 
 def _read_db() -> dict[str, Any]:
